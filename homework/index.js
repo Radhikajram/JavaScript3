@@ -81,7 +81,6 @@
             '</div>',
           );
 
-          console.log(repoInfo[repo].html_url);
           // Call another function(addContributors) to fill i contributor information.
           fetchJSON(repoInfo[repo].contributors_url, (err, data) => {
             const root = document.getElementById('root');
