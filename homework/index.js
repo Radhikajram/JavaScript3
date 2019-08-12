@@ -50,7 +50,7 @@
     }
 
     const htmlString = divElement.join('');
-    document.getElementById('contributorinfomation').innerHTML = htmlString;
+    document.getElementById('contributor-information').innerHTML = htmlString;
   }
 
   // Load the Repository information into  section1 div element.
@@ -95,7 +95,7 @@
       }
     }
     const htmlString = templateElement.join('');
-    document.getElementById('repodetails').innerHTML = htmlString;
+    document.getElementById('repo-details').innerHTML = htmlString;
   }
 
   // Create options under 'SELECT' element which should have HYF Repositories.
@@ -103,7 +103,7 @@
   function loadSelectionValues(userRepo) {
     const sortRepoName = [];
 
-    const selectRepo = document.getElementById('selectrepo');
+    const selectRepo = document.getElementById('select-repo');
 
     // push all the HYP repo names to sort array.
 
@@ -127,7 +127,7 @@
       selectRepo.appendChild(option);
     }
 
-    const selectBox = document.getElementById('selectrepo');
+    const selectBox = document.getElementById('select-repo');
     const selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
     // Load Repository information for the choose repository name in the select box.
@@ -147,25 +147,25 @@
       } else {
         // Create div element 'select' in  document body to hold the label element and list box.
 
-        createAndAppend('div', BodyEl, { id: 'seletcontainer' });
-        const select = document.getElementById('seletcontainer');
+        createAndAppend('div', BodyEl, { id: 'select-container' });
+        const select = document.getElementById('select-container');
         createAndAppend('LABEL', select, {
           text: 'HYF Repositories: ',
           id: 'label',
           for: 'repo',
         });
-        createAndAppend('select', select, { id: 'selectrepo' });
+        createAndAppend('select', select, { id: 'select-repo' });
 
         // Create two div elements section1 and section2 under 'Root' div to have
         // section1 - Repository Information.
         // section2 - Contributions.
 
-        createAndAppend('div', root, { id: 'repodetails' });
-        createAndAppend('div', root, { id: 'contributorinfomation' });
+        createAndAppend('div', root, { id: 'repo-details' });
+        createAndAppend('div', root, { id: 'contributor-information' });
 
         // Insert section1 before section2 div element under 'root' div.
-        const newNode = document.getElementById('contributorinfomation');
-        const referenceNode = document.querySelector('repodetails');
+        const newNode = document.getElementById('contributor-information');
+        const referenceNode = document.querySelector('repo-details');
         root.insertBefore(newNode, referenceNode);
 
         // Insert Select div first in the body before root div.

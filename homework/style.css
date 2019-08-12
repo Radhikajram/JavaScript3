@@ -13,25 +13,25 @@
   margin: 10px;
   padding: 20px;
 }
-#seletcontainer {
+#select-container {
   background-color: blue;
   margin-bottom: 10px;
   text-align: justify;
   width: 100%;
   font-size: 10px;
 }
-#selectrepo {
+#select-repo {
   margin-bottom: 10px;
   margin-top: 10px;
   font-size: 10px;
 }
-#root #repodetails {
+#root #repo-details {
   background-color: grey;
   margin-bottom: 10px;
   width: 85%;
   height: 50%;
 }
-#root #contributorinfomation {
+#root #contributor-information {
   background-color: grey;
   width: 80%;
 }
@@ -56,15 +56,15 @@ ul li:last-child {
         #root  {
           flex-direction: row;
       }
-      #selectrepo {
+      #select-repo {
         font-size: 15px;
       }
-      #seletcontainer {
+      #select-container {
                 font-size: 15px;
       }
-      #root #contributorinfomation {
+      #root #contributor-information {
         width: 100%;
       }
-      #root #repodetails {
+      #root #repo-details {
         width: 100%;
       }
