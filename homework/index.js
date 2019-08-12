@@ -50,12 +50,12 @@
     }
 
     const htmlString = divElement.join('');
-    document.getElementById('section2').innerHTML = htmlString;
+    document.getElementById('contributorinfomation').innerHTML = htmlString;
   }
 
   // Load the Repository information into  section1 div element.
 
-  function loadDiv(repoInfo, optionValue) {
+  function loadRepoDetails(repoInfo, optionValue) {
     const templateElement = [];
 
     // eslint-disable-next-line no-restricted-syntax
@@ -95,16 +95,15 @@
       }
     }
     const htmlString = templateElement.join('');
-    document.getElementById('section1').innerHTML = htmlString;
+    document.getElementById('repodetails').innerHTML = htmlString;
   }
 
   // Create options under 'SELECT' element which should have HYF Repositories.
 
-  function loadSelectionValues(userInfo) {
+  function loadSelectionValues(userRepo) {
     const sortRepoName = [];
 
-    const userRepo = JSON.parse(userInfo);
-    const mySelect = document.getElementById('myselect');
+    const selectRepo = document.getElementById('selectrepo');
 
     // push all the HYP repo names to sort array.
 
@@ -125,54 +124,54 @@
       const option = document.createElement('option');
       option.value = repo;
       option.text = repo;
-      mySelect.appendChild(option);
+      selectRepo.appendChild(option);
     }
 
-    const selectBox = document.getElementById('myselect');
+    const selectBox = document.getElementById('selectrepo');
     const selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
     // Load Repository information for the choose repository name in the select box.
-    loadDiv(userRepo, selectedValue);
+    loadRepoDetails(userRepo, selectedValue);
     selectBox.onchange = function() {
-      loadDiv(userRepo, selectBox.value);
+      loadRepoDetails(userRepo, selectBox.value);
     };
   }
 
   function main(url) {
     fetchJSON(url, (err, data) => {
       const root = document.getElementById('root');
-      const myParent = document.body;
+      const BodyEl = document.body;
 
       if (err) {
         createAndAppend('div', root, { text: err.message, class: 'alert-error' });
       } else {
         // Create div element 'select' in  document body to hold the label element and list box.
 
-        createAndAppend('div', myParent, { id: 'select' });
-        const select = document.getElementById('select');
+        createAndAppend('div', BodyEl, { id: 'seletcontainer' });
+        const select = document.getElementById('seletcontainer');
         createAndAppend('LABEL', select, {
           text: 'HYF Repositories: ',
           id: 'label',
           for: 'repo',
         });
-        createAndAppend('select', select, { id: 'myselect' });
+        createAndAppend('select', select, { id: 'selectrepo' });
 
         // Create two div elements section1 and section2 under 'Root' div to have
         // section1 - Repository Information.
         // section2 - Contributions.
 
-        createAndAppend('div', root, { id: 'section1' });
-        createAndAppend('div', root, { id: 'section2' });
+        createAndAppend('div', root, { id: 'repodetails' });
+        createAndAppend('div', root, { id: 'contributorinfomation' });
 
         // Insert section1 before section2 div element under 'root' div.
-        const newNode = document.getElementById('section2');
-        const referenceNode = document.querySelector('section1');
+        const newNode = document.getElementById('contributorinfomation');
+        const referenceNode = document.querySelector('repodetails');
         root.insertBefore(newNode, referenceNode);
 
         // Insert Select div first in the body before root div.
-        myParent.insertBefore(select, document.getElementById('root'));
+        BodyEl.insertBefore(select, document.getElementById('root'));
 
-        loadSelectionValues(JSON.stringify(data, null, 2));
+        loadSelectionValues(data);
       }
     });
   }
