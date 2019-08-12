@@ -1,19 +1,18 @@
 'use strict';
 
+// Using promise fetch the URL.
 {
-  function fetchJSON(url, cb) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.responseType = 'json';
-    xhr.onload = () => {
-      if (xhr.status < 400) {
-        cb(null, xhr.response);
-      } else {
-        cb(new Error(`Network error: ${xhr.status} - ${xhr.statusText}`));
-      }
-    };
-    xhr.onerror = () => cb(new Error('Network request failed'));
-    xhr.send();
+  function fetchUrl(url) {
+    return fetch(url)
+      .then(result => {
+        return result.json();
+      })
+      .then(data => {
+        return data;
+      })
+      .catch(error => {
+        console.log(`check the URL address${error}`);
+      });
   }
 
   function createAndAppend(name, parent, options = {}) {
@@ -82,14 +81,8 @@
           );
 
           // Call another function(addContributors) to fill i contributor information.
-          fetchJSON(repoInfo[repo].contributors_url, (err, data) => {
-            const root = document.getElementById('root');
-
-            if (err) {
-              createAndAppend('div', root, { text: err.message, class: 'alert-error' });
-            } else {
-              addContributors(data);
-            }
+          fetchUrl(repoInfo[repo].contributors_url).then(responseData => {
+            addContributors(responseData);
           });
         }
       }
@@ -128,52 +121,50 @@
     }
 
     const selectBox = document.getElementById('select-repo');
-    const selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
     // Load Repository information for the choose repository name in the select box.
-    loadRepoDetails(userRepo, selectedValue);
+    loadRepoDetails(userRepo, selectBox.value);
     selectBox.onchange = function() {
       loadRepoDetails(userRepo, selectBox.value);
     };
   }
 
   function main(url) {
-    fetchJSON(url, (err, data) => {
-      const root = document.getElementById('root');
-      const BodyEl = document.body;
+    const BodyEl = document.body;
+    const root = document.getElementById('root');
 
-      if (err) {
-        createAndAppend('div', root, { text: err.message, class: 'alert-error' });
-      } else {
-        // Create div element 'select' in  document body to hold the label element and list box.
-
-        createAndAppend('div', BodyEl, { id: 'select-container' });
-        const select = document.getElementById('select-container');
-        createAndAppend('LABEL', select, {
-          text: 'HYF Repositories: ',
-          id: 'label',
-          for: 'repo',
-        });
-        createAndAppend('select', select, { id: 'select-repo' });
-
-        // Create two div elements section1 and section2 under 'Root' div to have
-        // section1 - Repository Information.
-        // section2 - Contributions.
-
-        createAndAppend('div', root, { id: 'repo-details' });
-        createAndAppend('div', root, { id: 'contributor-information' });
-
-        // Insert section1 before section2 div element under 'root' div.
-        const newNode = document.getElementById('contributor-information');
-        const referenceNode = document.querySelector('repo-details');
-        root.insertBefore(newNode, referenceNode);
-
-        // Insert Select div first in the body before root div.
-        BodyEl.insertBefore(select, document.getElementById('root'));
-
-        loadSelectionValues(data);
-      }
+    // Call the fetchUrl function to fetch Repository information. The function will in tern returns promise.
+    const data = fetchUrl(url).then(responseData => {
+      loadSelectionValues(responseData);
     });
+
+    // Create div element 'select' in  document body to hold the label element and list box.
+
+    createAndAppend('div', BodyEl, { id: 'select-container' });
+    const select = document.getElementById('select-container');
+    createAndAppend('LABEL', select, {
+      text: 'HYF Repositories: ',
+      id: 'label',
+      for: 'repo',
+    });
+    createAndAppend('select', select, { id: 'select-repo' });
+
+    // Create two div elements section1 and section2 under 'Root' div to have
+    // section1 - Repository Information.
+    // section2 - Contributions.
+
+    createAndAppend('div', root, { id: 'repo-details' });
+    createAndAppend('div', root, { id: 'contributor-information' });
+
+    // Insert section1 before section2 div element under 'root' div.
+    const newNode = document.getElementById('contributor-information');
+    const referenceNode = document.querySelector('repo-details');
+    root.insertBefore(newNode, referenceNode);
+
+    // Insert Select div first in the body before root div.
+    BodyEl.insertBefore(select, document.getElementById('root'));
+
+    loadSelectionValues(data);
   }
 
   const HYF_REPOS_URL = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
