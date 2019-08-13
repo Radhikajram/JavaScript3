@@ -36,8 +36,7 @@
 
     divElement.push('<div id="header">', `${'<h3>'} Contributions: ${'</h3>'} ${'</div>'}`);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const details of contribution) {
+    contribution.forEach(details => {
       divElement.push(
         '<ul>',
         `${'<li>'} ${'<img src="'}${details.avatar_url}" width="40" height="40">`,
@@ -46,7 +45,7 @@
         `<li>${details.contributions}</li>`,
         '</ul>',
       );
-    }
+    });
 
     const htmlString = divElement.join('');
     document.getElementById('contributor-information').innerHTML = htmlString;
@@ -57,36 +56,30 @@
   function loadRepoDetails(repoInfo, optionValue) {
     const templateElement = [];
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const repo in repoInfo) {
-      if (Object.prototype.hasOwnProperty.call(repoInfo, repo)) {
-        if (optionValue === repoInfo[repo].name) {
-          // format the date
-          const upDate = new Date(repoInfo[repo].updated_at);
-          const amOrPm = upDate.getHours() < 12 ? 'AM' : 'PM';
-          const dateHours = upDate.getHours() % 12 || 12;
-          const formatedUpdate = `${upDate.getMonth()}/${upDate.getDate()}/${upDate.getFullYear()} ${dateHours}
+    Object.keys(repoInfo).forEach(key => {
+      if (optionValue === repoInfo[key].name) {
+        // format the date
+        const upDate = new Date(repoInfo[key].updated_at);
+        const amOrPm = upDate.getHours() < 12 ? 'AM' : 'PM';
+        const dateHours = upDate.getHours() % 12 || 12;
+        const formatedUpdate = `${upDate.getMonth()}/${upDate.getDate()}/${upDate.getFullYear()} ${dateHours}
              : ${upDate.getMinutes()}:${upDate.getSeconds()} ${amOrPm}`;
+        templateElement.push(
+          '<div id="row">',
+          `${'<p id="name-info">'} Repository name : ${'<a href="'}${
+            repoInfo[key].html_url
+          }"${'/>'} ${repoInfo[key].name}</a></p>`,
+          `${'<p id="desc">'}  Description :  ${repoInfo[key].description}</p>`,
+          `${'<p id="forks">'}  Forks       : ${repoInfo[key].forks_count}</p>`,
 
-          templateElement.push(
-            '<div id="row">',
-            `${'<p id="name-info">'} Repository name : ${'<a href="'}${
-              repoInfo[repo].html_url
-            }"${'/>'} ${repoInfo[repo].name}</a></p>`,
-            `${'<p id="desc">'}  Description :  ${repoInfo[repo].description}</p>`,
-            `${'<p id="forks">'}  Forks       : ${repoInfo[repo].forks_count}</p>`,
-
-            `${'<p id="updated">'} Updated  : ${formatedUpdate}</p>`,
-            '</div>',
-          );
-
-          // Call another function(addContributors) to fill i contributor information.
-          fetchUrl(repoInfo[repo].contributors_url).then(responseData => {
-            addContributors(responseData);
-          });
-        }
+          `${'<p id="updated">'} Updated  : ${formatedUpdate}</p>`,
+          '</div>',
+        );
+        fetchUrl(repoInfo[key].contributors_url).then(responseData => {
+          addContributors(responseData);
+        });
       }
-    }
+    });
     const htmlString = templateElement.join('');
     document.getElementById('repo-details').innerHTML = htmlString;
   }
@@ -100,25 +93,21 @@
 
     // push all the HYP repo names to sort array.
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const repo in userRepo) {
-      if (Object.prototype.hasOwnProperty.call(userRepo, repo)) {
-        sortRepoName.push(userRepo[repo].name);
-      }
-    }
+    Object.keys(userRepo).forEach(key => {
+      sortRepoName.push(userRepo[key].name);
+    });
 
     // sort the repo name using sort function and localeComapare for uppercase and lowercase sorting.
     sortRepoName.sort((a, b) => a.localeCompare(b));
 
     // Create Option under Select element and attach the  same with SELECT element.
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const repo of sortRepoName) {
+    sortRepoName.forEach(repo => {
       const option = document.createElement('option');
       option.value = repo;
       option.text = repo;
       selectRepo.appendChild(option);
-    }
+    });
 
     const selectBox = document.getElementById('select-repo');
 
