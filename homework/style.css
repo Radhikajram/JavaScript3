@@ -36,17 +36,15 @@
   width: 80%;
 }
 ul {
+
   list-style: none;
-  border-bottom: 1px solid #aaa;
 
  }
  ul li {
-   display: inline;
-   margin-right: 5px;
-}
-ul li:last-child {
-  float: right;
-  background-color: white;
+   display: block;
+  padding: 10px;
+   border-bottom: 1px solid #aaa;
+
 }
 
 
