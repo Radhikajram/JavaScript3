@@ -72,7 +72,6 @@ class App {
       });
 
       let keyIndex;
-      console.log(selectBox.value);
       Object.keys(repos).forEach(key => {
         if (selectBox.value === repos[key].name) {
           keyIndex = key;
