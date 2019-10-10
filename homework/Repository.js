@@ -13,8 +13,27 @@ class Repository {
    * @param {HTMLElement} container The container element in which to render the repository.
    */
   render(container) {
-    // TODO: replace the next line with your code.
-    Util.createAndAppend('pre', container, JSON.stringify(this.repository, null, 2));
+    const templateElement = [];
+
+    // format the date
+    const upDate = new Date(this.repository.updated_at);
+    const amOrPm = upDate.getHours() < 12 ? 'AM' : 'PM';
+    const dateHours = upDate.getHours() % 12 || 12;
+    const formatedUpdate = `${upDate.getMonth()}/${upDate.getDate()}/${upDate.getFullYear()} ${dateHours}
+             : ${upDate.getMinutes()}:${upDate.getSeconds()} ${amOrPm}`;
+    templateElement.push(
+      '<div id="row">',
+      `${'<p id="name-info">'} Repository name : ${'<a href="'}${
+        this.repository.html_url
+      }"${'/>'} ${this.repository.name}</a></p>`,
+      `${'<p id="desc">'}  Description :  ${this.repository.description}</p>`,
+      `${'<p id="forks">'}  Forks       : ${this.repository.forks_count}</p>`,
+      `${'<p id="updated">'} Updated  : ${formatedUpdate}</p>`,
+      '</div>',
+    );
+    const htmlString = templateElement.join('');
+
+    document.getElementById(container).innerHTML = htmlString;
   }
 
   /**
